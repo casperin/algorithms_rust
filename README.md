@@ -17,13 +17,13 @@ code/implementations. :-)
 
 ## Sort
 
-* [Bubble Sort](src/bubble_sort.rs)
-* [Bucket_sort](src/bucket_sort.rs)
-* [Heap Sort](src/heap_sort.rs)
-* [Insertion Sort](src/insertion_sort.rs)
-* [Merge Sort](src/merge_sort.rs)
-* [Quick Sort](src/quick_sort.rs)
-* [Selection Sort](src/selection_sort.rs)
+* [Bubble Sort](src/sort/bubble_sort.rs)
+* [Bucket_sort](src/sort/bucket_sort.rs)
+* [Heap Sort](src/sort/heap_sort.rs)
+* [Insertion Sort](src/sort/insertion_sort.rs)
+* [Merge Sort](src/sort/merge_sort.rs)
+* [Quick Sort](src/sort/quick_sort.rs)
+* [Selection Sort](src/sort/selection_sort.rs)
 
 
 ## Statistics
