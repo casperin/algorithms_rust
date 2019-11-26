@@ -6,6 +6,12 @@ I'm learning both Rust and algorithms here, so expect sub optimal
 code/implementations. :-)
 
 
+## Data structures
+
+* [Min Heap](src/data_structures/heap.rs)
+* [Linked List](src/data_structures/linked_list.rs)
+
+
 ## Search
 
 * [Binary Search](src/search/binary_search.rs)
