@@ -1,15 +1,58 @@
-/// Min head.
-pub struct Heap<T: Ord> {
+use std::cmp::Ordering;
+
+/// Min heap implementation. Works either straight on values that can be compared (like numbers and
+/// strings), or you can initiate it with a compare function in which case there are no
+/// restrictions on the type of values this heap works with.
+/// The heap also implements the iterator traits.
+pub struct Heap<'a, T> {
     items: Vec<T>,
+    compare: &'a dyn Fn(&T, &T) -> Ordering,
 }
 
-impl<T: Ord> Heap<T> {
-    pub fn new() -> Self {
-        Heap { items: Vec::new() }
+// Default comparing function. If the heap is created without a function to compare values, then
+// this one is used.
+fn compare<T: Ord>(a: &T, b: &T) -> Ordering {
+    a.cmp(b)
+}
+
+impl<'a, T> Heap<'a, T> {
+    pub fn new() -> Self
+    where
+        T: Ord,
+    {
+        Heap {
+            items: Vec::new(),
+            compare: &compare,
+        }
     }
 
-    pub fn from_vec(items: Vec<T>) -> Self {
-        let mut heap = Heap { items: items };
+    /// Creates a new heap from the provided array.
+    /// O(n log n)
+    pub fn from_vec(items: Vec<T>) -> Self
+    where
+        T: Ord,
+    {
+        let mut heap = Heap {
+            items: items,
+            compare: &compare,
+        };
+        heap.heapify();
+        heap
+    }
+
+    /// Create a new heap that uses the provided function to compare items.
+    pub fn with_compare(compare: &'a dyn Fn(&T, &T) -> Ordering) -> Self {
+        Heap {
+            items: Vec::new(),
+            compare: compare,
+        }
+    }
+
+    pub fn from_vec_with_compare(items: Vec<T>, compare: &'a dyn Fn(&T, &T) -> Ordering) -> Self {
+        let mut heap = Heap {
+            items: items,
+            compare: compare,
+        };
         heap.heapify();
         heap
     }
@@ -22,15 +65,20 @@ impl<T: Ord> Heap<T> {
         self.items.is_empty()
     }
 
+    /// Push new item onto the heap.
+    /// O(log n)
     pub fn push(&mut self, item: T) {
         self.items.push(item);
         self.sift_up(self.items.len() - 1);
     }
 
+    /// Let's you have a look at the lowest value without removing it.
     pub fn peek(&self) -> Option<&T> {
         self.items.first()
     }
 
+    /// Pop the lowest value out of the heap.
+    /// O(log n)
     pub fn pop(&mut self) -> Option<T> {
         if self.is_empty() {
             return None;
@@ -42,11 +90,16 @@ impl<T: Ord> Heap<T> {
         min
     }
 
+    /// Similar to `heap.push(item);` and then `heap.pop().unwrap();`. If you need to do both those
+    /// though, then this function will be faster.
+    /// O(log n)
     pub fn replace(&mut self, item: T) -> T {
         self.items.push(item); // we avoid the sifting up here
         self.pop().unwrap() // popping will balance it for us instead
     }
 
+    /// Combines another heap of similar type with this one, consuming the heap passed in.
+    /// O(n log n)
     pub fn meld(&mut self, other_heap: Heap<T>) {
         for item in other_heap {
             self.push(item);
@@ -66,7 +119,7 @@ impl<T: Ord> Heap<T> {
 
         let parent_index = (index - 1) / 2;
 
-        if self.items[index] < self.items[parent_index] {
+        if (self.compare)(&self.items[index], &self.items[parent_index]) == Ordering::Less {
             self.items.swap(index, parent_index);
             self.sift_up(parent_index);
         }
@@ -78,11 +131,12 @@ impl<T: Ord> Heap<T> {
         let right = index * 2 + 2;
         let items = &self.items;
 
-        if left < items.len() && items[left] < items[smallest] {
+        if left < items.len() && (self.compare)(&items[left], &items[smallest]) == Ordering::Less {
             smallest = left;
         }
 
-        if right < items.len() && items[right] < items[smallest] {
+        if right < items.len() && (self.compare)(&items[right], &items[smallest]) == Ordering::Less
+        {
             smallest = right;
         }
 
@@ -93,9 +147,9 @@ impl<T: Ord> Heap<T> {
     }
 }
 
-pub struct IntoIter<T: Ord>(Heap<T>);
+pub struct IntoIter<'a, T>(Heap<'a, T>);
 
-impl<T: Ord> Iterator for Heap<T> {
+impl<'a, T> Iterator for Heap<'a, T> {
     type Item = T;
     fn next(&mut self) -> Option<Self::Item> {
         self.pop()
@@ -113,7 +167,8 @@ mod tests {
 
         for i in 0..tests.len() {
             let (input, result, msg) = &tests[i];
-            let mut heap = Heap::from_vec(input.to_vec());
+            let v: Vec<i64> = input.to_vec();
+            let mut heap = Heap::from_vec(v);
 
             assert_eq!(heap.size(), input.len());
 
@@ -159,6 +214,28 @@ mod tests {
         assert_eq!(heap.next(), Some(100));
         assert!(heap.is_empty());
         assert_eq!(heap.replace(42), 42);
+    }
+
+    #[test]
+    fn with_compare() {
+        type K = (&'static str, i32);
+        let mut heap = Heap::with_compare(&|a: &K, b: &K| a.1.cmp(&b.1));
+        heap.push(("Alice", 3));
+        heap.push(("Bob", 1));
+        heap.push(("Carol", 2));
+        assert_eq!(heap.next(), Some(("Bob", 1)));
+        assert_eq!(heap.next(), Some(("Carol", 2)));
+        assert_eq!(heap.next(), Some(("Alice", 3)));
+    }
+
+    #[test]
+    fn from_vec_with_compare() {
+        type K = (&'static str, i32);
+        let v: Vec<K> = vec![("Alice", 3), ("Bob", 1), ("Carol", 2)];
+        let mut heap = Heap::from_vec_with_compare(v, &|a: &K, b: &K| a.1.cmp(&b.1));
+        assert_eq!(heap.next(), Some(("Bob", 1)));
+        assert_eq!(heap.next(), Some(("Carol", 2)));
+        assert_eq!(heap.next(), Some(("Alice", 3)));
     }
 
     #[test]
