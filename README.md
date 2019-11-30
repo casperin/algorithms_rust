@@ -15,8 +15,8 @@ code/implementations. :-)
 ## Graph
 
 * [Directed Graph](src/graph/directed_graph.rs)
-* [Breadth First Search](src/graph/breadth_first_search.rs]
-* [Depth First Search](src/graph/depth_first_search.rs]
+* [Breadth First Search](src/graph/breadth_first_search.rs)
+* [Depth First Search](src/graph/depth_first_search.rs)
 
 
 ## Search
