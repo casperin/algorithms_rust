@@ -12,6 +12,13 @@ code/implementations. :-)
 * [Linked List](src/data_structures/linked_list.rs)
 
 
+## Graph
+
+* [Directed Graph](src/graph/directed_graph.rs)
+* [Breadth First Search](src/graph/breadth_first_search.rs]
+* [Depth First Search](src/graph/depth_first_search.rs]
+
+
 ## Search
 
 * [Binary Search](src/search/binary_search.rs)

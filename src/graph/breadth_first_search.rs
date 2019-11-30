@@ -14,14 +14,14 @@ impl DirectedGraph {
     /// graph.add_edge(2, 3);
     /// graph.add_edge(3, 3);
     ///
-    /// let v = graph.breadth_first_search_new(2);
+    /// let v = graph.breadth_first_search(2);
     ///
     /// assert_eq!(v, vec![2, 0, 3, 1]);
     /// ```
     ///
     /// See [wikipedia](https://en.wikipedia.org/wiki/Breadth-first_search#Applications) for
     /// applications.
-    pub fn breadth_first_search_new(&self, node: i32) -> Vec<i32> {
+    pub fn breadth_first_search(&self, node: i32) -> Vec<i32> {
         let num_of_nodes = self.graph.len();
 
         let mut queue = Vec::with_capacity(num_of_nodes);
