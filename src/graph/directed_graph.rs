@@ -17,6 +17,9 @@ impl DirectedGraph {
         if self.graph.get(&u).is_none() {
             self.graph.insert(u, Vec::new());
         }
+        if self.graph.get(&v).is_none() {
+            self.graph.insert(v, Vec::new());
+        }
         self.graph.get_mut(&u).map(|edges| edges.push(v));
     }
 

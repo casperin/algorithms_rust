@@ -22,7 +22,7 @@ impl DirectedGraph {
     /// See [wikipedia](https://en.wikipedia.org/wiki/Depth-first_search#Applications) for
     /// applications.
     pub fn depth_first_search(&self, node: i32) -> Vec<i32> {
-        let num_of_nodes = self.graph.len();
+        let num_of_nodes = self.len();
         let mut queue = Vec::with_capacity(num_of_nodes);
         let mut visited = HashSet::with_capacity(num_of_nodes);
 

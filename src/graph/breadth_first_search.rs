@@ -22,7 +22,7 @@ impl DirectedGraph {
     /// See [wikipedia](https://en.wikipedia.org/wiki/Breadth-first_search#Applications) for
     /// applications.
     pub fn breadth_first_search(&self, node: i32) -> Vec<i32> {
-        let num_of_nodes = self.graph.len();
+        let num_of_nodes = self.len();
 
         let mut queue = Vec::with_capacity(num_of_nodes);
         queue.push(node);
