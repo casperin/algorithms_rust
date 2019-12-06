@@ -18,6 +18,7 @@ code/implementations. :-)
 * [Breadth First Search](src/graph/breadth_first_search.rs)
 * [Depth First Search](src/graph/depth_first_search.rs)
 * [Shortest Path](src/graph/shortest_path.rs)
+* [Kruskal's algorithm](src/graph/kruskal.rs)
 
 
 ## Search
