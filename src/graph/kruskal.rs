@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 impl WeightedGraph {
     /// Implementation of [Kruskal's
-    /// algorithm](https://en.m.wikipedia.org/wiki/Kruskal%27s_algorithm) finding a minimum
+    /// algorithm](https://en.m.wikipedia.org/wiki/Kruskal%27s_algorithm) for finding a minimum
     /// spanning tree (MST) in a undirected weighted graph.
     ///
     /// ```
