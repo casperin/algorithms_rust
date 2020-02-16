@@ -2,6 +2,7 @@ mod breadth_first_search;
 mod depth_first_search;
 mod directed_graph;
 mod kruskal;
+mod prim;
 mod shortest_path;
 mod weighted_graph;
 
